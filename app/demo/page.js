@@ -1,10 +1,26 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  savePost,
+  createPost,
+  loadPostById,
+  DB_NAME,
+  STORE_NAME,
+} from "../../libs/indexedDB"; // Import the IndexedDB utility
 
 import "tiptypr/dist/styles.css";
 import Tiptypr from "tiptypr";
 
-import { Cross2Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
+import {
+  Cross2Icon,
+  HamburgerMenuIcon,
+  ChevronDownIcon,
+  CubeIcon,
+  EyeOpenIcon,
+  EyeClosedIcon,
+} from "@radix-ui/react-icons";
+
 import ThemeSelector from "../../components/ThemeSelector";
 import RequireLoginCheckbox from "../../components/RequireLoginCheckbox";
 import EnablePublishingFlowCheckbox from "../../components/EnablePublishingFLowCheckbox";
@@ -18,15 +34,33 @@ import * as Accordion from "@radix-ui/react-accordion";
 
 import { defaultProps } from "tiptypr";
 import { customDeepMerge } from "@/libs/customDeepMerge";
+import IndexedDBBrowser from "@/components/IndexedDBBrowser";
+import { openDB } from "idb";
 
 const avatarOptions = [
-  { name: "Avatartion", imgSrc: "https://prototypr-media.sfo2.digitaloceanspaces.com/strapi/32a56359cbe6a680ac1eb8eb659c46eb.png" },
+  {
+    name: "Avatartion",
+    imgSrc:
+      "https://prototypr-media.sfo2.digitaloceanspaces.com/strapi/32a56359cbe6a680ac1eb8eb659c46eb.png",
+  },
   { name: "Pravatar", imgSrc: "https://i.pravatar.cc/300" },
-  { name: "Pixel (xsgames)", imgSrc: "https://xsgames.co/randomusers/avatar.php?g=pixel" },
-  { name: "UI Avatars", imgSrc: "https://ui-avatars.com/api/?background=random" },
+  {
+    name: "Pixel (xsgames)",
+    imgSrc: "https://xsgames.co/randomusers/avatar.php?g=pixel",
+  },
+  {
+    name: "UI Avatars",
+    imgSrc: "https://ui-avatars.com/api/?background=random",
+  },
   { name: "RoboHash", imgSrc: "https://robohash.org/random" },
-  { name: "Female (xsgames)", imgSrc: "https://xsgames.co/randomusers/avatar.php?g=female" },
-  { name: "Male (xsgames)", imgSrc: "https://xsgames.co/randomusers/avatar.php?g=male" },
+  {
+    name: "Female (xsgames)",
+    imgSrc: "https://xsgames.co/randomusers/avatar.php?g=female",
+  },
+  {
+    name: "Male (xsgames)",
+    imgSrc: "https://xsgames.co/randomusers/avatar.php?g=male",
+  },
 ];
 
 const filterModifiedProps = (defaultProps, currentProps) => {
@@ -64,10 +98,20 @@ const serializeComponents = components => {
 };
 
 export default function DemoPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = Object.fromEntries(searchParams.entries()); // Add this line to define params
+
+  const [postId, setPostId] = useState(params.id); // Add state for postId
+
+  useEffect(() => {
+    setPostId(params.id); // Update postId when params.id changes
+  }, [params.id]);
+
   const [editorProps, setEditorProps] = useState(() => {
     return customDeepMerge(defaultProps, {
       requireLogin: true,
-      enablePublishingFlow: true,
+      enablePublishingFlow: false,
       theme: "gray",
       user: {
         id: 1,
@@ -79,7 +123,7 @@ export default function DemoPage() {
           show: true,
           position: "sticky",
           userBadge: {
-            avatarPlaceholder:avatarOptions[0].imgSrc,
+            avatarPlaceholder: avatarOptions[0].imgSrc,
           },
         },
       },
@@ -88,6 +132,15 @@ export default function DemoPage() {
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [openAccordion, setOpenAccordion] = useState(null);
+
+  const [isDatabasePanelOpen, setIsDatabasePanelOpen] = useState(true);
+
+  useEffect(() => {
+    if (openAccordion) {
+      setIsDatabasePanelOpen(false);
+    }
+  }, [openAccordion]);
 
   const handleSeoMenuChange = newSeoMenu => {
     setEditorProps(prevProps => ({
@@ -124,6 +177,18 @@ export default function DemoPage() {
     { value: "gray", label: "Gray" },
     { value: "blue", label: "Blue" },
   ];
+
+  const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
+  const [simulatorSettings, setSimulatorSettings] = useState({
+    onUpdate: true,
+    onCreate: true,
+    onPublish: true,
+    onLoad: true,
+  });
+
+  const handleSimulatorChange = newSettings => {
+    setSimulatorSettings(newSettings);
+  };
 
   const handleThemeChange = value => {
     setEditorProps({ ...editorProps, theme: value });
@@ -169,9 +234,6 @@ export default function DemoPage() {
   const modifiedProps = filterModifiedProps(defaultProps, editorProps);
 
   const demoCode = `
-  import Tiptypr from 'tiptypr';
-  import "tiptypr/dist/styles.css";
-
     <Tiptypr
       requireLogin={${editorProps.requireLogin}}
       components={${serializeComponents(modifiedProps.components)}}
@@ -179,11 +241,56 @@ export default function DemoPage() {
       user={${JSON.stringify(editorProps.user, null, 2)}}
       enablePublishingFlow={${editorProps.enablePublishingFlow}}
       customPostStatuses={${editorProps.customPostStatuses}}
+      postId={${postId}} // Update to use postId state
+      postOperations={{
+        load: async function ({ postId }) {
+          const postObject = await loadPostById(parseInt(postId, 10));
+          console.log("loaded", postObject);
+          return postObject;
+        },
+        save: async function ({ postId, entry }) {
+          console.log("saving entry", entry);
+          const postObject = await savePost(entry, parseInt(postId, 10));
+          fetchData();
+          return postObject;
+        },
+        create: async function ({ entry }) {
+          console.log("created post", entry);
+          const postObject = await createPost(entry);
+          fetchData();
+          return postObject;
+        },
+      }}
+      hooks={{
+        onPostCreated: ({ id }) => {
+          const params = new URLSearchParams(searchParams);
+          params.set("id", id);
+          router.push(\`?\${params.toString()}\`, undefined, {
+            shallow: true,
+            scroll: false,
+          });
+        },
+      }}
     />
   `;
 
+  const [data, setData] = useState([]);
+
+  const fetchData = async () => {
+    // const db = await openDB(DB_NAME, 1);
+    const db = await openDB(DB_NAME);
+    const tx = db.transaction(STORE_NAME, "readonly");
+    const store = tx.objectStore(STORE_NAME);
+    const allData = await store.getAll();
+    setData(allData);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <div className="flex max-h-screen bg-gray-100 overflow-hidden">
+    <div className="flex max-h-screen bg-slate-100 overflow-hidden">
       <button
         className="absolute bottom-0 left-0 m-2 rounded-full z-[51] h-[44px] w-[44px] text-gray-500 bg-white flex items-center justify-center shadow-md border border-gray-300 lg:!hidden"
         onClick={() => setIsPanelOpen(!isPanelOpen)}
@@ -195,22 +302,27 @@ export default function DemoPage() {
         )}
       </button>
       <div
-        className={`min-h-screen lg:!w-1/4 bg-white shadow-md ${
+        className={`min-h-screen p-3  lg:!w-1/4  ${
           isPanelOpen
             ? "block w-full md:w-3/4 h-full z-50 absolute top-0 left-0"
             : "hidden"
-        } lg:block relative`}
+        } lg:block`}
       >
-        <h3 className="text-xl font-semibold border-b border-gray-300 px-3 pt-4 py-3">
-          Customize Editor
+        <div className="bg-white shadow-xl pb-[120px] border border-gray-300/70 relative overflow-hidden rounded-xl h-[calc(100vh-24px)]">
+        <h3 className="text-lg font-semibold border-b border-gray-300 px-3 pt-4 py-3">
+          Editor Config
         </h3>
 
         <Accordion.Root
           type="single"
+          value={openAccordion}
           collapsible
-          className="overflow-y-auto pb-[150px] h-full"
+          className={`overflow-y-auto h-full ${
+            openAccordion ? "pb-[180px]" : ""
+          } flex flex-col`}
           id="accordion-root"
           onValueChange={tabName => {
+            setOpenAccordion(tabName);
             if (tabName == "general-settings" || tabName == "seo-panel") {
               const settingsMenuBtn =
                 document.getElementById("settings-menu-btn");
@@ -230,13 +342,54 @@ export default function DemoPage() {
           }}
         >
           <Accordion.Item
+            value="theme-selector"
+            className="border-b border-gray-300"
+          >
+            <Accordion.Header className="data-[state=open]:bg-gray-100 data-[state=open]:border-b border-gray-300 flex justify-between items-center cursor-pointer hover:bg-gray-100">
+              <div className="w-full h-full">
+                <Accordion.Trigger className="text-md font-medium w-full p-4 py-3 h-full text-left flex items-center justify-between">
+                  Editor Settings
+                  <ChevronDownIcon
+                    className={`transition-transform duration-300 ${
+                      openAccordion === "theme-selector" ? "rotate-180" : ""
+                    }`}
+                  />
+                </Accordion.Trigger>
+              </div>
+            </Accordion.Header>
+            <Accordion.Content className="p-4">
+              <div className="flex flex-col gap-4">
+                <EnablePublishingFlowCheckbox
+                  enablePublishingFlow={editorProps.enablePublishingFlow}
+                  onEnablePublishingFlowChange={
+                    handleEnablePublishingFlowChange
+                  }
+                />
+                <RequireLoginCheckbox
+                  requireLogin={editorProps.requireLogin}
+                  onRequireLoginChange={handleRequireLoginChange}
+                />
+                <ThemeSelector
+                  theme={editorProps.theme}
+                  onThemeChange={handleThemeChange}
+                  themeOptions={themeOptions}
+                />
+              </div>
+            </Accordion.Content>
+          </Accordion.Item>
+          <Accordion.Item
             value="nav-settings"
             className="border-b border-gray-300"
           >
             <Accordion.Header className="data-[state=open]:bg-gray-100 data-[state=open]:border-b border-gray-300 flex justify-between items-center cursor-pointer hover:bg-gray-100">
               <div className="w-full h-full">
-                <Accordion.Trigger className="text-md font-medium w-full p-4 h-full text-left">
-                  Nav Settings
+                <Accordion.Trigger className="text-md font-medium w-full p-4 py-3 h-full text-left flex items-center justify-between">
+                  Navbar Settings
+                  <ChevronDownIcon
+                    className={`transition-transform duration-300 ${
+                      openAccordion === "nav-settings" ? "rotate-180" : ""
+                    }`}
+                  />
                 </Accordion.Trigger>
               </div>
             </Accordion.Header>
@@ -248,51 +401,26 @@ export default function DemoPage() {
               />
             </Accordion.Content>
           </Accordion.Item>
-          <Accordion.Item
-            value="theme-selector"
-            className="border-b border-gray-300"
-          >
-            <Accordion.Header className="data-[state=open]:bg-gray-100 data-[state=open]:border-b border-gray-300 flex justify-between items-center cursor-pointer hover:bg-gray-100">
-              <div className="w-full h-full">
-                <Accordion.Trigger className="text-md font-medium w-full p-4 h-full text-left">
-                  Editor Settings
-                </Accordion.Trigger>
-              </div>
-            </Accordion.Header>
-            <Accordion.Content className="p-4">
-              <div className="flex flex-col gap-4">
-                <ThemeSelector
-                  theme={editorProps.theme}
-                  onThemeChange={handleThemeChange}
-                  themeOptions={themeOptions}
-                />
-                <RequireLoginCheckbox
-                  requireLogin={editorProps.requireLogin}
-                  onRequireLoginChange={handleRequireLoginChange}
-                />
-                <EnablePublishingFlowCheckbox
-                  enablePublishingFlow={editorProps.enablePublishingFlow}
-                  onEnablePublishingFlowChange={
-                    handleEnablePublishingFlowChange
-                  }
-                />
-              </div>
-            </Accordion.Content>
-          </Accordion.Item>
 
           <Accordion.Item
             value="seo-panel"
             className="border-b border-gray-300"
           >
             <Accordion.Header className="data-[state=open]:bg-gray-100 data-[state=open]:border-b border-gray-300 flex justify-between items-center cursor-pointer hover:bg-gray-100">
-              {/* <div className="w-full h-full"> */}
-                <Accordion.Trigger className="text-md font-medium w-full p-4 h-full text-left">
+              <div className="w-full h-full">
+                <Accordion.Trigger className="text-md font-medium w-full p-4 py-3 h-full text-left flex items-center justify-between">
                   SEO Panel
+                  <ChevronDownIcon
+                    className={`transition-transform duration-300 ${
+                      openAccordion === "seo-panel" ? "rotate-180" : ""
+                    }`}
+                  />
                 </Accordion.Trigger>
-              {/* </div> */}
+              </div>
             </Accordion.Header>
             <Accordion.Content className="p-4">
               <SeoPanel
+                theme={editorProps?.theme}
                 seoMenu={editorProps.components.settingsPanel.seoTab.menu}
                 onValueChange={handleSeoMenuChange}
               />
@@ -305,13 +433,19 @@ export default function DemoPage() {
           >
             <Accordion.Header className="data-[state=open]:bg-gray-100 data-[state=open]:border-b border-gray-300 flex justify-between items-center cursor-pointer hover:bg-gray-100">
               <div className="w-full h-full">
-                <Accordion.Trigger className="text-md font-medium w-full p-4 h-full text-left">
+                <Accordion.Trigger className="text-md font-medium w-full p-4 py-3 h-full text-left flex items-center justify-between">
                   General Panel
+                  <ChevronDownIcon
+                    className={`transition-transform duration-300 ${
+                      openAccordion === "general-settings" ? "rotate-180" : ""
+                    }`}
+                  />
                 </Accordion.Trigger>
               </div>
             </Accordion.Header>
             <Accordion.Content className="p-4">
               <GeneralSettingsPanel
+                theme={editorProps.theme}
                 generalMenu={
                   editorProps.components.settingsPanel.generalTab?.menu
                 }
@@ -319,23 +453,68 @@ export default function DemoPage() {
               />
             </Accordion.Content>
           </Accordion.Item>
+
+          <div
+            className={` left-0 w-full ${
+              !isDatabasePanelOpen
+                ? "h-[50px] absolute bottom-[67px] hover:cursor-pointer"
+                : " bottom-0 flex flex-grow bg-slate-50 relative hover"
+            } `}
+          >
+            <div className={`${!isDatabasePanelOpen ? "hidden" : "w-full"}`}>
+              <div
+                onClick={() => setIsDatabasePanelOpen(!isDatabasePanelOpen)}
+                className="flex bg-slate-100 border-b border-gray-300 p-4 py-3 justify-between w-full mb-3 cursor-pointer"
+              >
+                <div className="flex items-center ">
+                  <CubeIcon className="mr-2" /> {/* Database icon */}
+                  <h2 className="text-sm font-medium">Database  <span className="text-xs pl-1 text-gray-500">(local storage)</span></h2>{" "}
+                  {/* Text */}
+                </div>
+                <div className="cursor-pointer my-auto">
+                  <EyeClosedIcon />
+                </div>
+              </div>
+              <IndexedDBBrowser data={data} onDelete={fetchData} router={router} searchParams={searchParams} />
+            </div>
+            <div
+              className={`${
+                isDatabasePanelOpen ? "hidden" : ""
+              } bg-slate-100 border-t border-gray-300/70 h-full w-full relative text-md font-medium w-full p-4 py-3 h-full text-left flex items-center justify-between`}
+              onClick={() => {
+                setOpenAccordion(false);
+                setIsDatabasePanelOpen(true);
+              }}
+            >
+              <div className="flex items-center">
+                <CubeIcon className="mr-2" /> {/* Database icon */}
+                <h2 className="text-sm font-medium">Database <span className="text-xs pl-1 text-gray-500">(local storage)</span></h2> {/* Text */}
+              </div>
+              <div className="cursor-pointer my-auto">
+                <EyeOpenIcon />
+              </div>
+            </div>
+          </div>
         </Accordion.Root>
 
         <div className="absolute bottom-0 left-0 w-full p-4 bg-white border-t border-gray-300 shadow-md">
-          <button
-            onClick={() => setIsDialogOpen(true)}
-            className={`w-full py-2 px-4 ${
-              editorProps?.theme == "blue"
-                ? "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
-                : "bg-gray-600 hover:bg-gray-700 focus:ring-gray-500"
-            } text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg`}
-          >
-            Show Demo Code
-          </button>
+          <div className="flex flex-col flex-col-reverse gap-3">
+            <button
+              onClick={() => setIsDialogOpen(true)}
+              className={`w-full text-sm h-[34px] px-3 ${
+                editorProps?.theme == "blue"
+                  ? "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
+                  : "bg-gray-600 hover:bg-gray-700 focus:ring-gray-500"
+              } text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg font-medium`}
+            >
+              Get Code
+            </button>
+          </div>
         </div>
       </div>
-      <div className="w-full md:w-3/4 md:p-6 flex flex-col relative min-h-screen">
-        <div className="bg-white md:rounded-lg md:shadow-lg flex-1 w-full overflow-y-auto max-w-[900px] mx-auto md:p-3 md:pr-1 md:pt-0">
+      </div>
+      <div className="w-full md:w-3/4 md:p-3 flex flex-col relative min-h-screen">
+        <div className="bg-white md:rounded-xl md:border border-gray-300/70 md:shadow-lg flex-1 w-full overflow-y-auto max-w-[900px] mx-auto md:p-3 md:pr-1 md:pt-0">
           <Tiptypr
             requireLogin={editorProps.requireLogin}
             components={editorProps.components}
@@ -343,6 +522,36 @@ export default function DemoPage() {
             user={editorProps.user}
             enablePublishingFlow={editorProps.enablePublishingFlow}
             customPostStatuses={editorProps.customPostStatuses}
+            postId={postId} // Update to use postId state
+            postOperations={{
+              load: async function ({ postId }) {
+                const postObject = await loadPostById(parseInt(postId, 10));
+                console.log("loaded", postObject);
+                return postObject;
+              },
+              save: async function ({ postId, entry }) {
+                console.log("saving entry", entry);
+                const postObject = await savePost(entry, parseInt(postId, 10));
+                fetchData();
+                return postObject;
+              },
+              create: async function ({ entry }) {
+                console.log("creating post", entry);
+                const postObject = await createPost(entry);
+                fetchData();
+                return postObject;
+              },
+            }}
+            hooks={{
+              onPostCreated: ({ id }) => {
+                const params = new URLSearchParams(searchParams);
+                params.set("id", id);
+                router.push(`?${params.toString()}`, undefined, {
+                  shallow: true,
+                  scroll: false,
+                });
+              },
+            }}
           />
         </div>
       </div>

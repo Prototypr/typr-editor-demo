@@ -69,9 +69,16 @@
 }
 
 body  {
-  font-family: var(--font-baskerville), serif;
+  font-family: var(--font-baskerville), serif!important;
 }
 
 h1, h2, h3, h4, h5, h6, button {
   font-family: var(--font-lora), serif!important;
+}
+button[role="combobox"]{
+  font-family: var(--font-baskerville), serif!important;
+
+}
+[data-tippy-root]{
+  z-index: 20!important;
 }

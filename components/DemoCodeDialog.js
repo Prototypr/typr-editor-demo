@@ -20,7 +20,7 @@ const DemoCodeDialog = ({ isDialogOpen, setIsDialogOpen, demoCode, theme }) => {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50 z-[98]" />
-        <Dialog.Content className="fixed m-6 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-md shadow-lg max-w-[680px] w-full z-[99]">
+        <Dialog.Content className="fixed m-6 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-md shadow-lg max-w-[680px] w-full z-[9999]">
           <Dialog.Title className="text-lg font-semibold mb-4">
             Demo Code
           </Dialog.Title>
