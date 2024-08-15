@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import {
   savePost,
   createPost,
@@ -100,13 +100,23 @@ const serializeComponents = components => {
 export default function DemoPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = Object.fromEntries(searchParams.entries()); // Add this line to define params
+  const pathname = usePathname();
 
-  const [postId, setPostId] = useState(params.id); // Add state for postId
+  const [postId, setPostId] = useState(-1);
 
   useEffect(() => {
-    setPostId(params.id); // Update postId when params.id changes
-  }, [params.id]);
+    // Check if the router is ready
+    if (pathname !== null) {
+      const id = searchParams.get('id');
+      
+      if (id) {
+        setPostId(id);
+      } else {
+        // create new post
+        setPostId(false);
+      }
+    }
+  }, [searchParams, pathname]);
 
   const [editorProps, setEditorProps] = useState(() => {
     return customDeepMerge(defaultProps, {

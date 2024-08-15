@@ -1,8 +1,5 @@
 {
   "name": "typr",
-  "workspaces": [
-    "../prototypr-frontend/prototypr-packages/tiptypr"
-  ],
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -30,7 +27,7 @@
     "react-table": "^7.8.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "tiptypr": "^0.0.71"
+    "tiptypr": "^0.0.78"
   },
   "devDependencies": {
     "postcss": "^8",
