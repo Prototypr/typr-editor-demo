@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import {
   savePost,
@@ -97,7 +97,7 @@ const serializeComponents = components => {
   return JSON.stringify(components, replacer, 2);
 };
 
-export default function DemoPage() {
+function DemoPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -576,5 +576,13 @@ export default function DemoPage() {
         handleUserChange={handleUserChange}
       />
     </div>
+  );
+}
+
+export default function DemoPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DemoPageContent />
+    </Suspense>
   );
 }
