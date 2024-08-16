@@ -3,23 +3,6 @@ import React from "react";
 import Tiptypr from 'tiptypr';
 import Head from 'next/head';
 
-export const metadata = {
-  title: 'Typr Editor - Open Source Content Editor by Prototypr',
-  description: 'A powerful and customizable text editor for your Next.js application.',
-  openGraph: {
-    title: 'Tiptypr Editor',
-    description: 'Create and edit content with ease using our advanced text editor.',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Tiptypr Editor Preview',
-      },
-    ],
-  },
-};
-
 export default function EditorPage() {
   return (
     <>
