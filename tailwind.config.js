@@ -6,6 +6,7 @@ module.exports = {
     './components/**/*.{js,jsx}',
     './app/**/*.{js,jsx}',
     './src/**/*.{js,jsx}',
+    './node_modules/tiptypr/dist/**/*.{js,jsx}',
   ],
   prefix: "",
   theme: {
