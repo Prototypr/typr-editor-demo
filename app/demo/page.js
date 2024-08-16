@@ -9,7 +9,6 @@ import {
   STORE_NAME,
 } from "@/libs/indexedDB"; // Import the IndexedDB utility
 
-// import "tiptypr/dist/styles.css";
 import Tiptypr from "tiptypr";
 
 import {

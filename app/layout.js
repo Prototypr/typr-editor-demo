@@ -1,4 +1,5 @@
 import { Baskervville, Lora } from '@next/font/google';
+import "tiptypr/dist/styles.css";
 import "./globals.css";
 
 const baskerville = Baskervville({
