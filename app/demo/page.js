@@ -209,18 +209,6 @@ function DemoPageContent() {
     { value: "blue", label: "Blue" },
   ];
 
-  const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
-  const [simulatorSettings, setSimulatorSettings] = useState({
-    onUpdate: true,
-    onCreate: true,
-    onPublish: true,
-    onLoad: true,
-  });
-
-  const handleSimulatorChange = newSettings => {
-    setSimulatorSettings(newSettings);
-  };
-
   const handleThemeChange = value => {
     setEditorProps({ ...editorProps, theme: value });
   };
@@ -233,9 +221,9 @@ function DemoPageContent() {
     setEditorProps({ ...editorProps, enablePublishingFlow: checked });
   };
 
-  const handleCustomPostStatusesChange = checked => {
-    setEditorProps({ ...editorProps, customPostStatuses: checked });
-  };
+  // const handleCustomPostStatusesChange = checked => {
+  //   setEditorProps({ ...editorProps, customPostStatuses: checked });
+  // };
 
   const handleNavChange = nav => {
     setEditorProps({
@@ -247,10 +235,10 @@ function DemoPageContent() {
     });
   };
 
-  const handleSettingsChange = (field, value) => {
-    // Update the settings based on the field and value
-    console.log(`${field} changed to:`, value);
-  };
+  // const handleSettingsChange = (field, value) => {
+  //   // Update the settings based on the field and value
+  //   console.log(`${field} changed to:`, value);
+  // };
 
   const handleUserChange = (field, value) => {
     setEditorProps(prevProps => ({
@@ -602,6 +590,15 @@ function DemoPageContent() {
                   return postObject;
                 },
               }}
+              // mediaHandler={{
+              //   config: {
+              //     method: "post",
+              //     url: `${process.env.NEXT_PUBLIC_API_URL}/api/users-permissions/users/article/image/upload`,
+              //     headers: {
+              //       Authorization: `Bearer ${user?.jwt}`,
+              //     }
+              //   },
+              // }}
               hooks={{
                 onPostCreated: ({ id }) => {
                   const params = new URLSearchParams(searchParams);
