@@ -1,7 +1,7 @@
 import { Baskervville, Lora } from '@next/font/google';
 import "tiptypr/dist/styles.css";
 import "./globals.css";
-import Script from 'next/script';
+// import Script from 'next/script';
 
 const baskerville = Baskervville({
   weight: '400',
@@ -37,8 +37,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <Script
+      {/* <head> */}
+        {/* <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-X8QJE8EP22"
         />
@@ -49,8 +49,8 @@ export default function RootLayout({ children }) {
             gtag('js', new Date());
             gtag('config', 'G-X8QJE8EP22');
           `}
-        </Script>
-      </head>
+        </Script> */}
+      {/* </head> */}
       <body className={`${baskerville.variable} ${lora.variable}`}>{children}</body>
     </html>
   );
