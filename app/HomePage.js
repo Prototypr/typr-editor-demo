@@ -239,15 +239,13 @@ const LandingPage = () => {
               Open for Contributions
             </h2>
             <div className="max-w-3xl mx-auto text-center">
-              <p className="text-gray-700 mb-6">
+              <p className="text-gray-700 text-xl mb-6">
                 Typr is an open-source project that's actively maintained and
-                open for contributions. We believe in the power of
-                community-driven development and welcome developers of all skill
-                levels to contribute to the project.
+                open for contributions.
               </p>
               <div className="flex justify-center items-center space-x-4">
                 <GitBranch size={24} className="text-blue-600" />
-                <p className="text-gray-700 font-medium">
+                <p className="text-gray-700 text-lg font-medium">
                   Join us on GitHub and help shape the future of Typr!
                 </p>
               </div>
@@ -277,7 +275,7 @@ const LandingPage = () => {
             <a
               href="https://github.com/prototypr/typr"
               target="_blank"
-              className="text-gray-700 hover:text-gray-800 font-medium"
+              className="text-gray-700 text-lg hover:text-gray-800 font-medium"
             >
               Read the full documentation →
             </a>
