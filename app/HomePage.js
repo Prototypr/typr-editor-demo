@@ -75,7 +75,7 @@ const LandingPage = () => {
         <section className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl font-bold mb-4">Typr Editor</h1>
           <p className="text-xl text-gray-700 mb-8">
-            An open-source editor for publishers, with <br /> draft/publish
+            An open-source editor for publishers, with <span className="hidden md:inline"><br /></span> draft/publish
             workflow and user management.
           </p>
           <div className="flex justify-center space-x-4">
@@ -85,7 +85,7 @@ const LandingPage = () => {
               className="text-gray-800 text-lg font-bold transition flex items-center"
             >
               <GitBranch className="mr-2" size={20} />
-              View on GitHub
+              Fork on GitHub
             </a>
           </div>
         </section>
@@ -137,7 +137,7 @@ const LandingPage = () => {
         <section className="bg-white py-16">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">
-              Key Features
+              Built for Publishers
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               <FeatureCard
@@ -176,7 +176,7 @@ const LandingPage = () => {
 
         <section className="container mx-auto px-4 py-16">
           <h2 className="text-3xl font-bold text-center mb-8">Why Typr?</h2>
-          <div className="max-w-3xl text-lg mx-auto">
+          <div className="max-w-3xl text-xl max-w-[40rem] mx-auto">
             <p className="text-gray-700 mb-4">
               Typr (made with <a href="https://tiptap.dev" target="_blank" className="text-blue-700 hover:text-blue-800 font-medium">TipTap</a>) was built to streamline the process of adding a rich editing
               experience with publishing and autosaving capabilities to any
@@ -189,21 +189,19 @@ const LandingPage = () => {
                 Prototypr
               </a>
               , a platform built with <a href="https://strapi.io" target="_blank" className="text-blue-700 hover:text-blue-800 font-medium">Strapi</a> and <a href="https://nextjs.org" target="_blank" className="text-blue-700 hover:text-blue-800 font-medium">Next.js</a>, Typr has evolved into
-              a standalone package that can be used with any Content Management
-              System.
+              a standalone package.
             </p>
             <p className="text-gray-700 mb-4">
-              Our goal is to provide developers with a powerful, flexible, and
-              easy-to-integrate editor that can handle content loading,
+              The goal is to provide developers with a flexible, and
+              easy-to-integrate editor that handles content loading,
               creation, and auto-saving out of the box. By adding your user data
               and database props, you get a fully functional editor with draft
               and publishing workflows, saving you time and effort in
               implementation.
             </p>
             <p className="text-gray-700">
-              Typr is made for blogs, content management systems, and any
-              application that requires a clean Medium-like editing
-              experience.
+              If you have any questions or feedback, please reach out to me on <a href="https://x.com/graeme_fulton" target="_blank" className="text-blue-700 hover:text-blue-800 font-medium">X</a>.
+              Also, <a href="https://github.com/prototypr/typr" target="_blank" className="text-blue-700 hover:text-blue-800 font-medium">star it on GitHub</a> if it's useful.
             </p>
             <div className="mt-8 flex p-4 bg-gray-50 hover:bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 w-fit mx-auto border border-gray-200 items-center justify-center">
               <a
