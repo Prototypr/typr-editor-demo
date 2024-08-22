@@ -86,9 +86,11 @@ const LandingPage = () => {
             </a> */}
             <a
               href="/demo"
-              className="bg-gray-700 text-white px-4 h-[30px] text-sm font-bold my-auto flex flex-col justify-center rounded-md hover:bg-gray-800 transition"
+              className="my-auto"
             >
-              Customise <span className="hidden md:inline">it</span>
+              <button className="bg-gray-700 text-white px-4 h-[30px] text-sm font-bold my-auto justify-center rounded-md hover:bg-gray-800 transition">
+                Customise <span className="hidden md:inline">it</span>
+              </button>
             </a>
           </div>
         </nav>
