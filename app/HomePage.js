@@ -138,10 +138,10 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
-        <div className="fixed bottom-4 right-4 z-50">
+        <div className="fixed bottom-4 right-4 z-50 hidden md:block">
           <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-2">
             <div
-              className="relative hidden md:block"
+              className="relative"
               style={{ width: "300px", height: "169px" }}
             >
               <iframe
