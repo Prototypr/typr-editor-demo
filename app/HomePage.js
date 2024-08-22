@@ -61,7 +61,7 @@ const LandingPage = () => {
                 Star
               </GitHubButton>
             </div>
-            <div className="my-auto pt-2 ">
+            <div className="my-auto hidden md:block pt-2 ">
               <GitHubButton
                 href="https://github.com/sponsors/prototypr"
                 data-color-scheme="no-preference: light; light: light; dark: dark;"
@@ -88,7 +88,7 @@ const LandingPage = () => {
               href="/demo"
               className="bg-gray-700 text-white px-4 h-[30px] text-sm font-bold my-auto flex flex-col justify-center rounded-md hover:bg-gray-800 transition"
             >
-              Customise it
+              Customise <span className="hidden md:inline">it</span>
             </a>
           </div>
         </nav>
@@ -139,7 +139,7 @@ const LandingPage = () => {
         <div className="fixed bottom-4 right-4 z-50">
           <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-2">
             <div
-              className="relative"
+              className="relative hidden md:block"
               style={{ width: "300px", height: "169px" }}
             >
               <iframe
