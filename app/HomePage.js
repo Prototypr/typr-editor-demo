@@ -1,5 +1,6 @@
 import React from "react";
-import Tiptypr from "tiptypr";
+// import Tiptypr from "tiptypr";
+import GitHubButton from "react-github-btn";
 
 import {
   ArrowRight,
@@ -15,8 +16,8 @@ import {
 const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow-sm">
-        <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
+      <header className="bg-white shadow-sm m-[6px] rounded-2xl border border-gray-200/80 fixed top-0 w-[calc(980px-12px)] max-w-[94vw] left-[50%] translate-x-[-50%] z-50">
+        <nav className="px-2.5 mx-auto px-0 py-1 flex justify-between items-center">
           <svg
             class="h-8 my-auto w-auto"
             width="164"
@@ -48,22 +49,44 @@ const LandingPage = () => {
             </defs>
           </svg>
           {/* <img src="/api/placeholder/150/50" alt="Typr Logo" className="h-8" /> */}
-          <div>
-            <a
+          <div className="flex gap-3">
+            <div className="my-auto pt-2">
+              <GitHubButton
+                href="https://github.com/prototypr/typr"
+                data-color-scheme="no-preference: light; light: light; dark: dark;"
+                data-size="large"
+                data-show-count="true"
+                aria-label="Star prototypr/typr on GitHub"
+              >
+                Star
+              </GitHubButton>
+            </div>
+            <div className="my-auto pt-2 ">
+              <GitHubButton
+                href="https://github.com/sponsors/prototypr"
+                data-color-scheme="no-preference: light; light: light; dark: dark;"
+                data-icon="octicon-heart"
+                data-size="large"
+                aria-label="Sponsor @prototypr on GitHub"
+              >
+                Sponsor
+              </GitHubButton>
+            </div>
+            {/* <a
               href="https://prototypr.io/typr"
               className="text-gray-700 hover:text-gray-800 font-medium mr-4"
             >
               Prototypr
-            </a>
-            <a
+            </a> */}
+            {/* <a
               href="https://github.com/prototypr/typr"
               className="text-gray-700 hover:text-gray-800 font-medium mr-4"
             >
               GitHub
-            </a>
+            </a> */}
             <a
               href="/demo"
-              className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition"
+              className="bg-gray-700 text-white px-4 h-[30px] text-sm font-bold my-auto flex flex-col justify-center rounded-md hover:bg-gray-800 transition"
             >
               Customise it
             </a>
@@ -72,11 +95,14 @@ const LandingPage = () => {
       </header>
 
       <main>
-        <section className="container mx-auto px-4 py-16 text-center">
+        <section className="container pt-[128px] mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl font-bold mb-4">Typr Editor</h1>
           <p className="text-xl text-gray-700 mb-8">
-            An open-source editor for publishers, with <span className="hidden md:inline"><br /></span> draft/publish
-            workflow and user management.
+            An open-source editor for publishers, with{" "}
+            <span className="hidden md:inline">
+              <br />
+            </span>{" "}
+            draft/publish workflow and user management.
           </p>
           <div className="flex justify-center space-x-4">
             <a
@@ -178,7 +204,15 @@ const LandingPage = () => {
           <h2 className="text-3xl font-bold text-center mb-8">Why Typr?</h2>
           <div className="max-w-3xl text-xl max-w-[40rem] mx-auto">
             <p className="text-gray-700 mb-4">
-              Typr (made with <a href="https://tiptap.dev" target="_blank" className="text-blue-700 hover:text-blue-800 font-medium">TipTap</a>) was built to streamline the process of adding a rich editing
+              Typr (made with{" "}
+              <a
+                href="https://tiptap.dev"
+                target="_blank"
+                className="text-blue-700 hover:text-blue-800 font-medium"
+              >
+                TipTap
+              </a>
+              ) was built to streamline the process of adding a rich editing
               experience with publishing and autosaving capabilities to any
               React project. Originally developed for{" "}
               <a
@@ -188,20 +222,50 @@ const LandingPage = () => {
               >
                 Prototypr
               </a>
-              , a platform built with <a href="https://strapi.io" target="_blank" className="text-blue-700 hover:text-blue-800 font-medium">Strapi</a> and <a href="https://nextjs.org" target="_blank" className="text-blue-700 hover:text-blue-800 font-medium">Next.js</a>, Typr has evolved into
-              a standalone package.
+              , a platform built with{" "}
+              <a
+                href="https://strapi.io"
+                target="_blank"
+                className="text-blue-700 hover:text-blue-800 font-medium"
+              >
+                Strapi
+              </a>{" "}
+              and{" "}
+              <a
+                href="https://nextjs.org"
+                target="_blank"
+                className="text-blue-700 hover:text-blue-800 font-medium"
+              >
+                Next.js
+              </a>
+              , Typr has evolved into a standalone package.
             </p>
             <p className="text-gray-700 mb-4">
               The goal is to provide developers with a flexible, and
-              easy-to-integrate editor that handles content loading,
-              creation, and auto-saving out of the box. By adding your user data
-              and database props, you get a fully functional editor with draft
-              and publishing workflows, saving you time and effort in
+              easy-to-integrate editor that handles content loading, creation,
+              and auto-saving out of the box. By adding your user data and
+              database props, you get a fully functional editor with draft and
+              publishing workflows, saving you time and effort in
               implementation.
             </p>
             <p className="text-gray-700">
-              If you have any questions or feedback, please reach out to me on <a href="https://x.com/graeme_fulton" target="_blank" className="text-blue-700 hover:text-blue-800 font-medium">X</a>.
-              Also, <a href="https://github.com/prototypr/typr" target="_blank" className="text-blue-700 hover:text-blue-800 font-medium">star it on GitHub</a> if it's useful.
+              If you have any questions or feedback, please reach out to me on{" "}
+              <a
+                href="https://x.com/graeme_fulton"
+                target="_blank"
+                className="text-blue-700 hover:text-blue-800 font-medium"
+              >
+                X
+              </a>
+              . Also,{" "}
+              <a
+                href="https://github.com/prototypr/typr"
+                target="_blank"
+                className="text-blue-700 hover:text-blue-800 font-medium"
+              >
+                star it on GitHub
+              </a>{" "}
+              if it's useful.
             </p>
             <div className="mt-8 flex p-4 bg-gray-50 hover:bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 w-fit mx-auto border border-gray-200 items-center justify-center">
               <a
@@ -225,9 +289,7 @@ const LandingPage = () => {
                 >
                   By Graeme
                 </a>
-                <p className="text-gray-500 text-sm">
-                    @graeme_fulton
-                </p>
+                <p className="text-gray-500 text-sm">@graeme_fulton</p>
               </div>
             </div>
           </div>
