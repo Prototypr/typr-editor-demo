@@ -177,3 +177,58 @@ a.kofi-button:active {
     transform: rotate(0) scale(1);
   }
 }
+
+.browser-mockup {
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  background-color: #f0f0f0;
+  overflow: hidden;
+}
+
+.browser-toolbar {
+  background-color: #e0e0e0;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.browser-dots {
+  display: flex;
+  margin-right: 10px;
+}
+
+.browser-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.browser-dots span:nth-child(1) { background-color: #ff5f56; }
+.browser-dots span:nth-child(2) { background-color: #ffbd2e; }
+.browser-dots span:nth-child(3) { background-color: #27c93f; }
+
+.browser-address-bar {
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 5px 10px;
+  flex-grow: 1;
+  font-size: 14px;
+  color: #333;
+}
+
+.browser-address-bar span {
+  color: #999;
+}
+
+.browser-content {
+  background-color: #fff;
+  padding: 0px;
+  overflow-x: auto;
+}
+
+.browser-content pre {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
