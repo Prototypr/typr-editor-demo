@@ -4,7 +4,7 @@ import { DB_NAME, STORE_NAME } from "../libs/indexedDB"; // Import the IndexedDB
 import { TrashIcon } from "@radix-ui/react-icons"; // Import the Radix TrashIcon
 import { PlusIcon } from "@radix-ui/react-icons"; // Import the Radix PlusIcon
 
-const IndexedDBBrowser = ({ data, onDelete, router, searchParams }) => {
+const IndexedDBBrowser = ({ data, onDelete, router, searchParams, reset }) => {
   const deleteRow = async id => {
     // const db = await openDB(DB_NAME, 1);
     const db = await openDB(DB_NAME);

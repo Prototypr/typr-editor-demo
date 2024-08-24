@@ -491,6 +491,9 @@ function DemoPageContent() {
                       onDelete={fetchData}
                       router={router}
                       searchParams={searchParams}
+                      reset={()=>{
+                        setPostId(-1)
+                      }}
                     />
                   </div>
                   <div
